@@ -1,4 +1,3 @@
-% GAY
 clear
 
 bern = Model.Node('Bern', 1);
