@@ -13,12 +13,13 @@ classdef Lane < handle
             obj.AdditionalTime = additionalTime;
         end
         
+        % Mutates state
         function obj = connectTo(obj, to)
             obj.To = to;
         end
         
         function time = weight(obj)
-            timeAtFullSpeed = obj.SpeedLimit / 60 * obj.Length;
+            timeAtFullSpeed = obj.Length / (obj.SpeedLimit / 60);
             time = timeAtFullSpeed + obj.AdditionalTime;
         end
     end

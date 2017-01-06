@@ -1,12 +1,14 @@
 classdef Node < handle
     properties
-        Out = []
-        In = []
+        abstand
+        vorgaenger
     end
     
     properties (SetAccess = private)
         Name = ''
         Index = 0
+        Out = []
+        In = []
     end
     
     methods
@@ -15,6 +17,7 @@ classdef Node < handle
             obj.Index = index;
         end
                 
+        % Mutates state
         function connect(obj, lanes, node)
             obj.Out = [obj.Out lanes(1)];
             node.In = [node.In lanes(end)];
