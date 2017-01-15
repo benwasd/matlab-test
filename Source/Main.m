@@ -1,13 +1,16 @@
 clear
 
 swissMotorway = MasterData.GraphFactory.create();
-st = swissMotorway.getSt();
+swissMotorway.plot();
 
 shortestPath = swissMotorway.deijkstra('Winterthur', 'Bern');
 minimumSpanningTree = swissMotorway.kruskal();
 
-disp(shortestPath{1,1});
-disp(shortestPath{2,1});
-
-G = digraph(st(:,1), st(:,2), st(:,3));
-plot(G, 'EdgeLabel', G.Edges.Weight, 'NodeLabel',arrayfun(@(x) x.Name, swissMotorway.Nodes, 'UniformOutput', false));
+peter = Model.Mensch();
+kuchen = peter.definiereEssen('Kuchen');
+pizza = peter.definiereEssen('Pizza');
+kuchen(); % Peter isst Kuchen, er hat schon 1 gehabt.
+pizza();  % Peter isst Pizza, er hat schon 1 gehabt.
+kuchen(); % Peter isst Kuchen, er hat schon 2 gehabt.
+kuchen(); % Peter isst Kuchen, er hat schon 3 gehabt.
+pizza();  % Peter isst Pizza, er hat schon 2 gehabt.

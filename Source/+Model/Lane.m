@@ -1,5 +1,5 @@
 classdef Lane < handle
-    properties 
+    properties (SetAccess = private)
         SpeedLimit = 120
         Length = 0
         AdditionalTime = 0
@@ -21,6 +21,10 @@ classdef Lane < handle
         function time = weight(obj)
             timeAtFullSpeed = obj.Length / (obj.SpeedLimit / 60);
             time = timeAtFullSpeed + obj.AdditionalTime;
+        end
+        
+        function r = plus(obj1, obj2)
+            r = horzcat(obj1, obj2);
         end
     end
     

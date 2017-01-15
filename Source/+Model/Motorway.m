@@ -10,6 +10,26 @@ classdef Motorway
     end
     
     methods
+        function plot(obj)
+            st = [];
+
+            for n = obj.Nodes
+                st = x(st, n);
+            end
+                
+            G = digraph(st(:,1), st(:,2), st(:,3));
+            plot(G, 'EdgeLabel', G.Edges.Weight, 'NodeLabel',arrayfun(@(x) x.Name, obj.Nodes, 'UniformOutput', false));
+            
+            function st = x(st, source)
+                connectedNodes = source.connectedNodes();
+                for j = 1:size(connectedNodes, 1)
+                    weight = connectedNodes{j,1};
+                    node = connectedNodes{j,2};
+                    st = vertcat(st, [source.Index node.Index weight]); %#ok 
+                end
+            end
+        end
+        
         function res = deijkstra(obj, startNodeName, finishNodeName)
             startNodePosition = arrayfun(@(x) strcmp(x.Name, startNodeName), obj.Nodes, 'UniformOutput', true);
             startNode = obj.Nodes(startNodePosition);
@@ -92,23 +112,6 @@ classdef Motorway
             
             
             res = '';
-        end
-               
-        function st = getSt(obj) 
-            st = [];
-            
-            for n = obj.Nodes
-                st = x(st, n);
-            end
-
-            function st = x(st, source)
-                connectedNodes = source.connectedNodes();
-                for j = 1:size(connectedNodes, 1)
-                    weight = connectedNodes{j,1};
-                    node = connectedNodes{j,2};
-                    st = vertcat(st, [source.Index node.Index weight]); %#ok 
-                end
-            end
         end
     end
 end

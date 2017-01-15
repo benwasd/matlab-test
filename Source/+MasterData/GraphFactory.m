@@ -20,11 +20,13 @@ classdef GraphFactory
             baar = Model.City('Baar (Zug)', 17);
             horg = Model.Interchange('Horgen', 18);
             chur = Model.City('Chur', 19);
-
+            
             bern.connect(Model.Lane(100, 6.1, 4), scho);
             scho.connect(Model.Lane(100, 6.1, 8), bern);
-            scho.connect([Model.Lane(100, 1.5, 0), Model.Lane(120, 23.8, 1)], biel);
-            biel.connect([Model.Lane(120, 23.8, 0), Model.Lane(100, 1.5, 5)], scho);
+            
+            schoenbuehl.connect(Model.Lane(100, 1.5, 0) + Model.Lane(120, 23.8, 1), biel);
+            
+            biel.connect(Model.Lane(120, 23.8, 0) + Model.Lane(100, 1.5, 5), scho);
             biel.connect(Model.Lane(80, 17.3, 0), lute);
             lute.connect(Model.Lane(80, 17.3, 0), biel);
             scho.connect(Model.Lane(120, 24.5, 0), lute);
@@ -49,8 +51,8 @@ classdef GraphFactory
             likr.connect(Model.Lane(120, 16.0, 0), birr);
             likr.connect(Model.Lane(100, 12.8, 0), zuos);
             zuos.connect(Model.Lane(100, 12.8, 0), likr);
-            zuos.connect([Model.Lane(80, 4, 0), Model.Lane(120, 15.9, 0)], wint);
-            wint.connect([Model.Lane(120, 15.9, 0), Model.Lane(80, 4, 0)], zuos);
+            zuos.connect(Model.Lane(80, 4, 0) + Model.Lane(120, 15.9, 0), wint);
+            wint.connect(Model.Lane(120, 15.9, 0) + Model.Lane(80, 4, 0), zuos);
             zuos.connect(Model.Lane(100, 4.4, 6), zuer);
             zuer.connect(Model.Lane(100, 4.4, 0), zuos);
             likr.connect(Model.Lane(80, 9, 10), zuer);
