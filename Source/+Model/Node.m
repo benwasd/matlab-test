@@ -1,4 +1,4 @@
-classdef Node < handle
+classdef Node < handle & matlab.mixin.Heterogeneous
     properties
         abstand
         vorgaenger

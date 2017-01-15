@@ -1,6 +1,6 @@
-classdef Motorway < handle
+classdef Motorway
     properties
-        Nodes = {}
+        Nodes = []
     end
     
     methods    
@@ -11,21 +11,21 @@ classdef Motorway < handle
     
     methods
         function res = deijkstra(obj, startNodeName, finishNodeName)
-            startNodePosition = cellfun(@(x) strcmp(x.Name, startNodeName), obj.Nodes, 'UniformOutput', true);
-            startNode = obj.Nodes{startNodePosition};
-            finishNodePosition = cellfun(@(x) strcmp(x.Name, finishNodeName), obj.Nodes, 'UniformOutput', true);
-            finishNode = obj.Nodes{finishNodePosition};
+            startNodePosition = arrayfun(@(x) strcmp(x.Name, startNodeName), obj.Nodes, 'UniformOutput', true);
+            startNode = obj.Nodes(startNodePosition);
+            finishNodePosition = arrayfun(@(x) strcmp(x.Name, finishNodeName), obj.Nodes, 'UniformOutput', true);
+            finishNode = obj.Nodes(finishNodePosition);
             
             initialize(startNode);
             q = obj.Nodes';
             
-            while sum(~cellfun('isempty', q)) > 0
-                foobar = min(cellfun(@(x) getAbstandSafe(x), q, 'UniformOutput', true));
-                uIndex = find(cellfun(@(x) getAbstandSafe(x) == foobar, q, 'UniformOutput', true));
-                u = q{uIndex};
+            while sum(~arrayfun(@(x) isempty(x), q)) > 0
+                minAbstand = min(arrayfun(@(x) getAbstandSafe(x), q, 'UniformOutput', true));
+                uIndex = find(arrayfun(@(x) getAbstandSafe(x) == minAbstand, q, 'UniformOutput', true));
+                u = q(uIndex);
                     
                 if numel(uIndex) == 1
-                    q{uIndex,:} = [];
+                    q(uIndex,:) = [];
                 end
                 
                 connectedNodes = u.connectedNodes();
@@ -33,7 +33,7 @@ classdef Motorway < handle
                     abstand = connectedNodes{i,1};
                     v = connectedNodes{i,2};
                     
-                    if any(cellfun(@(x) isempty(x) == false && x == v, q, 'UniformOutput', true))
+                    if any(arrayfun(@(x) isempty(x) == false && x == v, q, 'UniformOutput', true))
                         update(u, v, abstand);
                     end
                 end
@@ -41,19 +41,17 @@ classdef Motorway < handle
             
             passedInterchanges = finishNode.Name;            
             node = finishNode;
-            minutes = 0;
             while isempty(node.vorgaenger) == false
                 node = node.vorgaenger;
-                minutes = minutes + node.abstand;
-                passedInterchanges = strcat(node.Name, {' '}, passedInterchanges);
+                passedInterchanges = strcat(node.Name, {', '}, passedInterchanges);
             end
             
-            res = {passedInterchanges{1}; minutes};
+            res = {passedInterchanges{1}; finishNode.abstand};
             
             function initialize(start)
-                for j = 1:numel(obj.Nodes)
-                    obj.Nodes{j}.abstand = realmax;
-                    obj.Nodes{j}.vorgaenger = [];
+                for n = obj.Nodes
+                    n.abstand = realmax;
+                    n.vorgaenger = [];
                 end
                 start.abstand = 0;
             end
@@ -75,22 +73,23 @@ classdef Motorway < handle
             end
         end
         
-        function res = kruskal(obj)
-            for i = 1:numel(obj.Nodes)
-            end
-            
-            cities = {}; % currently includes interchanges too
-            edges = {};
+        function res = kruskal(obj)           
+            cities = []; % currently includes interchanges too
+            edges = [];
             
             for node = obj.Nodes
-                connectedNodes = node{1}.connectedNodes();
+                connectedNodes = node.connectedNodes();
                 
-                for i = 1:numel(connectedNodes{1})
-                    edges = vertcat(edges, [node{1}.Index connectedNodes{i,2}.Index connectedNodes{i,1}]); %#ok 
+                for i = 1:size(connectedNodes, 1)
+                    edges = vertcat(edges, [connectedNodes{i,1} node.Index connectedNodes{i,2}.Index]); %#ok 
                 end
                 
-                cities = vertcat(cities, {node{1}}); %#ok 
+                cities = vertcat(cities, node); %#ok 
             end
+            
+            edges = sortrows(edges);
+            
+            
             
             res = '';
         end
@@ -98,8 +97,8 @@ classdef Motorway < handle
         function st = getSt(obj) 
             st = [];
             
-            for i = 1:numel(obj.Nodes)
-                st = x(st, obj.Nodes{i});
+            for n = obj.Nodes
+                st = x(st, n);
             end
 
             function st = x(st, source)
@@ -107,7 +106,7 @@ classdef Motorway < handle
                 for j = 1:size(connectedNodes, 1)
                     weight = connectedNodes{j,1};
                     node = connectedNodes{j,2};
-                    st = vertcat(st, [node.Index source.Index weight]); %#ok 
+                    st = vertcat(st, [source.Index node.Index weight]); %#ok 
                 end
             end
         end

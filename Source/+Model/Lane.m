@@ -1,5 +1,5 @@
 classdef Lane < handle
-    properties (SetAccess = private)
+    properties 
         SpeedLimit = 120
         Length = 0
         AdditionalTime = 0
