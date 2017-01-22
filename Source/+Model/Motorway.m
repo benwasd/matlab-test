@@ -30,7 +30,7 @@ classdef Motorway
             end
         end
         
-        function res = deijkstra(obj, startNodeName, finishNodeName)
+        function res = dijkstra(obj, startNodeName, finishNodeName)
             startNodePosition = arrayfun(@(x) strcmp(x.Name, startNodeName), obj.Nodes, 'UniformOutput', true);
             startNode = obj.Nodes(startNodePosition);
             finishNodePosition = arrayfun(@(x) strcmp(x.Name, finishNodeName), obj.Nodes, 'UniformOutput', true);

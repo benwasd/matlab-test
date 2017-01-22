@@ -23,9 +23,7 @@ classdef GraphFactory
             
             bern.connect(Model.Lane(100, 6.1, 4), scho);
             scho.connect(Model.Lane(100, 6.1, 8), bern);
-            
-            schoenbuehl.connect(Model.Lane(100, 1.5, 0) + Model.Lane(120, 23.8, 1), biel);
-            
+            scho.connect(Model.Lane(100, 1.5, 0) + Model.Lane(120, 23.8, 1), biel);
             biel.connect(Model.Lane(120, 23.8, 0) + Model.Lane(100, 1.5, 5), scho);
             biel.connect(Model.Lane(80, 17.3, 0), lute);
             lute.connect(Model.Lane(80, 17.3, 0), biel);
